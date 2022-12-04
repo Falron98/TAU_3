@@ -1,59 +1,58 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class AppTest_assertJ {
 
-    private static App sut;
+    @Test
+    public void checkFractionsEqual_true() {
+        Fraction firstFraction = new Fraction(2, 3);
+        Fraction secondFraction = new Fraction(2, 3);
 
-    @BeforeEach
-    void setUp(){
-        sut = new App();
-        sut.makeFriends("Andrzej", "Szymon");
-    }
-
-    @AfterEach
-    void tearDown(){
-        sut = null;
+        assertThat(firstFraction.equals(secondFraction)).isEqualTo(true);
     }
 
     @Test
-    @DisplayName("List contains Key")
-    public void test_List_has_key() {
-        assertThat(sut.friendships).containsKey("Andrzej");
+    public void HalfOfFraction_true() {
+        assertThat(Fraction.of(2, 1)).isEqualTo(new Fraction(1, 2));
     }
 
     @Test
-    @DisplayName("Key 1 has item")
-    public void test_Key1_has_item(){
-        assertThat(sut.getFriendsList("Andrzej")).contains("Szymon");
+    public void OneThirdFraction_true() {
+        assertThat(Fraction.of(3, 1)).isEqualTo(new Fraction(1, 3));
     }
 
     @Test
-    @DisplayName("Key 2 has item")
-    public void test_Key2_has_item(){
-        assertThat(sut.getFriendsList("Szymon")).contains("Andrzej");
+    public void divideByZeroException() {
+        assertThatThrownBy(() -> Fraction.of(1, 0)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    @DisplayName("Test method 'areFriends' = true")
-    public void test_areFriends_true(){
-        assertThat(sut.areFriends("Andrzej", "Szymon")).isTrue();
+    public void checkFractionsMultiply() {
+        Fraction firstFraction = new Fraction(1, 2);
+        Fraction secondFraction = new Fraction(1, 2);
+        assertThat(firstFraction.multiply(firstFraction, secondFraction).toString()).isEqualTo("1/4");
     }
 
     @Test
-    @DisplayName("Test method 'areFriends' = false")
-    public void test_areFriends_false(){
-        assertThat(sut.areFriends("Andrzej", "Jan")).isFalse();
+    public void checkFractionsNegativeMultiply() {
+        Fraction firstFraction = new Fraction(-11, 20);
+        Fraction secondFraction = new Fraction(3, 7);
+        assertThat(firstFraction.multiply(firstFraction, secondFraction).toString()).isEqualTo("33/-140");
     }
 
     @Test
-    @DisplayName("Test method 'getFriendsList'")
-    public void test_getFriendsList_true(){
-        assertThat(sut.getFriendsList("Andrzej")).isNotNull();
+    public void checkFractionsAdds() {
+        Fraction firstFraction = new Fraction(5, 26);
+        Fraction secondFraction = new Fraction(18, 210);
+        assertThat(firstFraction.add(firstFraction, secondFraction).toString()).isEqualTo("253/910");
+    }
+
+    @Test
+    public void checkFractionsNegativeAdds() {
+        Fraction firstFraction = new Fraction(20, 120);
+        Fraction secondFraction = new Fraction(-50, 69);
+        assertThat(firstFraction.add(firstFraction, secondFraction).toString()).isEqualTo("-77/138");
     }
 }
-
